@@ -49,18 +49,24 @@
         /* نافذة الطلب الفخمة */
         .modal-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.4s; }
         .modal-overlay.active { opacity: 1; pointer-events: auto; }
-        .modal-box { background: #111; border: 1px solid #c5a880; padding: 35px; width: 90%; max-width: 440px; border-radius: 12px; position: relative; }
+        .modal-box { background: #111; border: 1px solid #c5a880; padding: 30px; width: 95%; max-width: 460px; border-radius: 12px; position: relative; max-height: 90vh; overflow-y: auto; }
         .close-modal { position: absolute; top: 15px; left: 15px; background: transparent; border: none; color: #fff; font-size: 20px; cursor: pointer; }
         
-        .form-group { margin-bottom: 15px; }
+        .form-group { margin-bottom: 12px; }
         .form-group label { display: block; font-size: 14px; color: #aaa; margin-bottom: 6px; }
-        .form-group input { width: 100%; padding: 12px; background: #181818; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 15px; }
-        .form-group input:focus { outline: none; border-color: #c5a880; }
+        .form-group input, .form-group select { width: 100%; padding: 12px; background: #181818; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 15px; font-family: 'Amiri', serif; }
+        .form-group input:focus, .form-group select:focus { outline: none; border-color: #c5a880; }
         
-        .bundle-options { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
-        .bundle-btn { width: 100%; padding: 12px; background: #181818; border: 1px solid #333; color: #aaa; cursor: pointer; text-align: center; border-radius: 6px; transition: 0.3s; font-size: 14px; }
+        .bundle-options { display: flex; flex-direction: column; gap: 8px; margin-top: 5px; }
+        .bundle-btn { width: 100%; padding: 10px; background: #181818; border: 1px solid #333; color: #aaa; cursor: pointer; text-align: center; border-radius: 6px; transition: 0.3s; font-size: 14px; }
         .bundle-btn.selected { border-color: #c5a880; color: #fff; background: rgba(197, 168, 128, 0.1); font-weight: bold; }
-        .submit-btn { width: 100%; padding: 15px; background: #c5a880; border: none; color: #000; font-weight: bold; font-size: 16px; border-radius: 6px; cursor: pointer; font-family: 'Amiri', serif; margin-top: 20px; }
+        
+        /* حاوية خيارات تشكيل العطور */
+        .perfume-selection-box { background: #161616; border: 1px dashed #c5a880; padding: 12px; border-radius: 6px; margin-top: 10px; display: none; }
+        .perfume-selection-box p { font-size: 14px; color: #c5a880; margin-bottom: 8px; font-weight: bold; }
+        .select-grid { display: flex; flex-direction: column; gap: 8px; }
+
+        .submit-btn { width: 100%; padding: 15px; background: #c5a880; border: none; color: #000; font-weight: bold; font-size: 16px; border-radius: 6px; cursor: pointer; font-family: 'Amiri', serif; margin-top: 15px; }
 
         @media (max-width: 768px) {
             .slide { padding-right: 5%; justify-content: center; text-align: center; }
@@ -77,24 +83,19 @@
         <h1>AKA PERFUME</h1>
     </div>
 
-    <!-- كانفاس الخلفية المتحركة -->
     <canvas id="sprayCanvas"></canvas>
 
-    <!-- أسهم التنقل -->
     <div class="nav-arrow arrow-left" onclick="prevSlide()">&#10094;</div>
     <div class="nav-arrow arrow-right" onclick="nextSlide()">&#10095;</div>
 
-    <!-- شريط الثقة الملكي للبراند -->
     <div class="trust-bar">
         <div>✨ ثبات مضمون <strong>48 ساعة</strong></div>
         <div>🚚 التوصيل <strong>مجاني لكافة المحافظات</strong></div>
         <div>📦 الدفع <strong>عند الاستلام والمعاينة</strong></div>
     </div>
 
-    <!-- السلايدر المتكامل -->
     <div class="slider-container" id="slider">
         
-        <!-- العطر 1: الترياق -->
         <div class="slide">
             <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-eiffel-tower-and-paris-street-at-sunset-41611-large.mp4" autoplay loop muted playsinline></video>
             <div class="slide-overlay"></div>
@@ -106,7 +107,6 @@
             </div>
         </div>
 
-        <!-- العطر 2: الهيبة -->
         <div class="slide">
             <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-paris-architecture-and-traffic-at-night-41620-large.mp4" autoplay loop muted playsinline></video>
             <div class="slide-overlay"></div>
@@ -118,7 +118,6 @@
             </div>
         </div>
 
-        <!-- العطر 3: الغمام -->
         <div class="slide">
             <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-seine-river-and-bridge-in-paris-41613-large.mp4" autoplay loop muted playsinline></video>
             <div class="slide-overlay"></div>
@@ -126,11 +125,10 @@
                 <div class="perfume-title">الْغَمَام</div>
                 <div class="perfume-tag">EAU DE PARFUM</div>
                 <div class="price-box">15 دينار <span style="font-size:16px; color:#fff; font-weight:normal; margin-right:10px;">(التوصيل مجاني)</span></div>
-                <button class="order-btn" onclick="openOrderModal('الْغَمام')">ORDER NOW</button>
+                <button class="order-btn" onclick="openOrderModal('الْغَمَام')">ORDER NOW</button>
             </div>
         </div>
 
-        <!-- العطر 4: دلال -->
         <div class="slide">
             <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-arc-de-triomphe-in-paris-at-sunset-41618-large.mp4" autoplay loop muted playsinline></video>
             <div class="slide-overlay"></div>
@@ -144,20 +142,18 @@
 
     </div>
 
-    <!-- دوائر التحكم بالسلايدر -->
     <div class="navigation-dots">
         <div class="dot active" onclick="moveToSlide(0)"></div>
-        <div class="dot" onclick="onclick="moveToSlide(1)"></div>
+        <div class="dot" onclick="moveToSlide(1)"></div>
         <div class="dot" onclick="moveToSlide(2)"></div>
         <div class="dot" onclick="moveToSlide(3)"></div>
     </div>
 
-    <!-- نافذة الطلب -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-box">
             <button class="close-modal" onclick="closeOrderModal()">✕</button>
             <h2 id="modalPerfumeName" style="text-align:center; margin-bottom:5px;">طلب عطر</h2>
-            <p style="text-align:center; color:#c5a880; font-size:14px; margin-bottom:20px;">كفالة ذهبية على فخامة وجودة الثبات والتوصيل مجاني</p>
+            <p style="text-align:center; color:#c5a880; font-size:14px; margin-bottom:15px;">كفالة ذهبية على فخامة وجودة الثبات والتوصيل مجاني</p>
             
             <div class="form-group">
                 <label>الاسم الكامل:</label>
@@ -173,11 +169,44 @@
             </div>
 
             <div class="form-group">
-                <label>اختر العرض التوفيري الفخم الحصري (التوصيل مجاني لكافة العروض):</label>
+                <label>اختر العرض التوفيري الفخم الحصري:</label>
                 <div class="bundle-options">
-                    <div class="bundle-btn selected" id="opt1" onclick="selectBundle('عبوة واحدة بـ 15 دينار والتوصيل مجاني', 1)">عبوة واحدة بـ 15 دينار (توصيل مجاني)</div>
-                    <div class="bundle-btn" id="opt2" onclick="selectBundle('عبوتين بـ 25 دينار والتوصيل مجاني (توفير 5 دنانير) 🔥', 2)">عبوتين بـ 25 دينار (توصيل مجاني) 🔥</div>
-                    <div class="bundle-btn" id="opt3" onclick="selectBundle('3 عبوات بـ 35 دينار والتوصيل مجاني (العرض الملكي الأقوى) 👑', 3)">3 عبوات بـ 35 دينار (توصيل مجاني) 👑</div>
+                    <div class="bundle-btn selected" id="opt1" onclick="selectBundle('عبوة واحدة بـ 15 دينار والتوصيل مجاني', 1, 1)">عبوة واحدة بـ 15 دينار (توصيل مجاني)</div>
+                    <div class="bundle-btn" id="opt2" onclick="selectBundle('عبوتين بـ 25 دينار والتوصيل مجاني (توفير 5 دنانير) 🔥', 2, 2)">عبوتين بـ 25 دينار (توصيل مجاني) 🔥</div>
+                    <div class="bundle-btn" id="opt3" onclick="selectBundle('3 عبوات بـ 35 دينار والتوصيل مجاني (العرض الملكي الأقوى) 👑', 3, 3)">3 عبوات بـ 35 دينار (توصيل مجاني) 👑</div>
+                </div>
+            </div>
+
+            <div class="perfume-selection-box" id="mixBox">
+                <p>⚙️ حدد الأنواع التي ترغب بها في العرض (شكل طلبك على ذوقك):</p>
+                <div class="select-grid">
+                    <div id="bottle1Group">
+                        <label style="font-size:12px; color:#aaa;">العطر الأول:</label>
+                        <select id="bottle1">
+                            <option value="التِّرْيَاق">التِّرْيَاق</option>
+                            <option value="الْهَيْبَة">الْهَيْبَة</option>
+                            <option value="الْغَمَام">الْغَمَام</option>
+                            <option value="دَلَال">دَلَال</option>
+                        </select>
+                    </div>
+                    <div id="bottle2Group">
+                        <label style="font-size:12px; color:#aaa;">العطر الثاني:</label>
+                        <select id="bottle2">
+                            <option value="الْهَيْبَة">الْهَيْبَة</option>
+                            <option value="التِّرْيَاق">التِّرْيَاق</option>
+                            <option value="الْغَمَام">الْغَمَام</option>
+                            <option value="دَلَال">دَلَال</option>
+                        </select>
+                    </div>
+                    <div id="bottle3Group">
+                        <label style="font-size:12px; color:#aaa;">العطر الثالث:</label>
+                        <select id="bottle3">
+                            <option value="الْغَمَام">الْغَمَام</option>
+                            <option value="التِّرْيَاق">التِّرْيَاق</option>
+                            <option value="الْهَيْبَة">الْهَيْبَة</option>
+                            <option value="دَلَال">دَلَال</option>
+                        </select>
+                    </div>
                 </div>
             </div>
             
@@ -191,6 +220,7 @@
         let currentIdx = 0;
         let selectedPerfume = '';
         let selectedOffer = 'عبوة واحدة بـ 15 دينار والتوصيل مجاني';
+        let currentBundleSize = 1;
 
         function moveToSlide(index) {
             currentIdx = index;
@@ -271,14 +301,35 @@
         function openOrderModal(perfumeName) {
             selectedPerfume = perfumeName;
             document.getElementById('modalPerfumeName').innerText = `طلب عطر (${perfumeName})`;
+            selectBundle('عبوة واحدة بـ 15 دينار والتوصيل مجاني', 1, 1);
             document.getElementById('orderModal').classList.add('active');
         }
         function closeOrderModal() { document.getElementById('orderModal').classList.remove('active'); }
 
-        function selectBundle(offerText, id) {
+        function selectBundle(offerText, id, count) {
             selectedOffer = offerText;
+            currentBundleSize = count;
             document.querySelectorAll('.bundle-btn').forEach(btn => btn.classList.remove('selected'));
             document.getElementById('opt' + id).classList.add('selected');
+
+            const mixBox = document.getElementById('mixBox');
+            const b1 = document.getElementById('bottle1Group');
+            const b2 = document.getElementById('bottle2Group');
+            const b3 = document.getElementById('bottle3Group');
+
+            if(count === 1) {
+                mixBox.style.display = 'none';
+            } else if (count === 2) {
+                mixBox.style.display = 'block';
+                b1.style.display = 'block';
+                b2.style.display = 'block';
+                b3.style.display = 'none';
+            } else if (count === 3) {
+                mixBox.style.display = 'block';
+                b1.style.display = 'block';
+                b2.style.display = 'block';
+                b3.style.display = 'block';
+            }
         }
 
         function sendOrderToWhatsApp() {
@@ -290,12 +341,26 @@
                 alert('الرجاء تعبئة معلوماتك بالكامل لحجز العرض يا غالي!'); return;
             }
 
-            // رقم الواتساب الخاص بك بعد التعديل الصحيح والمباشر لقاعدة البيانات
+            let mixDetails = '';
+            if(currentBundleSize === 1) {
+                mixDetails = `${selectedPerfume} (عبوة واحدة)`;
+            } else if(currentBundleSize === 2) {
+                const choice1 = document.getElementById('bottle1').value;
+                const choice2 = document.getElementById('bottle2').value;
+                mixDetails = `[ ${choice1} ] + [ ${choice2} ]`;
+            } else if(currentBundleSize === 3) {
+                const choice1 = document.getElementById('bottle1').value;
+                const choice2 = document.getElementById('bottle2').value;
+                const choice3 = document.getElementById('bottle3').value;
+                mixDetails = `[ ${choice1} ] + [ ${choice2} ] + [ ${choice3} ]`;
+            }
+
             const myWhatsAppNumber = "962776567463"; 
 
             const message = `👑 طلب جديد وحصري لبراند AKA PERFUME 👑\n\n` +
-                            `🧪 عطر السلايدر المختار: ${selectedPerfume}\n` +
-                            `🛍️ العرض المطلوب: ${selectedOffer}\n\n` +
+                            `🧪 عطر السلايدر الرئيسي: ${selectedPerfume}\n` +
+                            `🛍️ العرض المطلوب: ${selectedOffer}\n` +
+                            `📦 التشكيلة المطلوبة: ${mixDetails}\n\n` +
                             `👤 اسم الزبون: ${name}\n` +
                             `📞 رقم الهاتف: ${phone}\n` +
                             `📍 موقع التوصيل: ${address}\n\n` +
