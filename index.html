@@ -31,7 +31,7 @@
         .order-btn { background: transparent; color: #fff; border: 1px solid #fff; padding: 15px 50px; font-family: 'Cinzel', serif; letter-spacing: 4px; cursor: pointer; transition: 0.4s; font-weight: bold; border-radius: 4px; }
         .order-btn:hover { background: #fff; color: #000; box-shadow: 0 15px 30px rgba(255,255,255,0.15); transform: translateY(-2px); }
         
-        /* أزرار التنقل (الأسهم يمين ويسار) المضافة حديثاً */
+        /* أزرار التنقل (الأسهم يمين ويسار) */
         .nav-arrow { position: fixed; top: 50%; transform: translateY(-50%); width: 50px; height: 50px; background: rgba(0,0,0,0.5); border: 1px solid #c5a880; border-radius: 50%; display: flex; justify-content: center; align-items: center; color: #c5a880; font-size: 24px; cursor: pointer; z-index: 200; transition: 0.3s ease; box-shadow: 0 4px 15px rgba(0,0,0,0.5); }
         .nav-arrow:hover { background: #c5a880; color: #000; box-shadow: 0 0 15px #c5a880; }
         .arrow-left { left: 30px; }
@@ -42,7 +42,7 @@
         .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); cursor: pointer; transition: 0.4s; }
         .dot.active { background: #c5a880; border-color: #c5a880; transform: scale(1.3); box-shadow: 0 0 10px #c5a880; }
 
-        /* شريط ميزات البراند الثابت (تحديث ميزة التوصيل المجاني) */
+        /* شريط ميزات البراند الثابت */
         .trust-bar { position: fixed; bottom: 110px; right: 10%; z-index: 90; display: flex; gap: 30px; font-size: 13px; color: #888; border-right: 2px solid #c5a880; padding-right: 15px; }
         .trust-bar strong { color: #c5a880; }
 
@@ -65,7 +65,7 @@
         @media (max-width: 768px) {
             .slide { padding-right: 5%; justify-content: center; text-align: center; }
             .perfume-title { font-size: 45px; }
-            .trust-bar { display: none; } /* إخفاء بار الثقة على الموبايل لتجنب التداخل مع الأسهم */
+            .trust-bar { display: none; }
             .arrow-left { left: 15px; width: 40px; height: 40px; font-size: 18px; }
             .arrow-right { right: 15px; width: 40px; height: 40px; font-size: 18px; }
         }
@@ -77,21 +77,21 @@
         <h1>AKA PERFUME</h1>
     </div>
 
-    <!-- كانفاس الخلفية المتحركة (جزيئات العطور) -->
+    <!-- كانفاس الخلفية المتحركة -->
     <canvas id="sprayCanvas"></canvas>
 
-    <!-- أسهم التنقل المضافة حديثاً -->
+    <!-- أسهم التنقل -->
     <div class="nav-arrow arrow-left" onclick="prevSlide()">&#10094;</div>
     <div class="nav-arrow arrow-right" onclick="nextSlide()">&#10095;</div>
 
-    <!-- شريط الثقة الملكي للبراند (تم تعديل ميزة التوصيل لتصبح التوصيل مجاني لكافة المحافظات) -->
+    <!-- شريط الثقة الملكي للبراند -->
     <div class="trust-bar">
         <div>✨ ثبات مضمون <strong>48 ساعة</strong></div>
         <div>🚚 التوصيل <strong>مجاني لكافة المحافظات</strong></div>
         <div>📦 الدفع <strong>عند الاستلام والمعاينة</strong></div>
     </div>
 
-    <!-- السلايدر المتكامل بـ 4 عطور وفيديوهات أجواء باريس التشويقية -->
+    <!-- السلايدر المتكامل -->
     <div class="slider-container" id="slider">
         
         <!-- العطر 1: الترياق -->
@@ -126,7 +126,7 @@
                 <div class="perfume-title">الْغَمَام</div>
                 <div class="perfume-tag">EAU DE PARFUM</div>
                 <div class="price-box">15 دينار <span style="font-size:16px; color:#fff; font-weight:normal; margin-right:10px;">(التوصيل مجاني)</span></div>
-                <button class="order-btn" onclick="openOrderModal('الْغَمَام')">ORDER NOW</button>
+                <button class="order-btn" onclick="openOrderModal('الْغَمام')">ORDER NOW</button>
             </div>
         </div>
 
@@ -147,12 +147,12 @@
     <!-- دوائر التحكم بالسلايدر -->
     <div class="navigation-dots">
         <div class="dot active" onclick="moveToSlide(0)"></div>
-        <div class="dot" onclick="moveToSlide(1)"></div>
+        <div class="dot" onclick="onclick="moveToSlide(1)"></div>
         <div class="dot" onclick="moveToSlide(2)"></div>
         <div class="dot" onclick="moveToSlide(3)"></div>
     </div>
 
-    <!-- نافذة الطلب بالعروض الرسمية الجديدة مع التوصيل المجاني -->
+    <!-- نافذة الطلب -->
     <div class="modal-overlay" id="orderModal">
         <div class="modal-box">
             <button class="close-modal" onclick="closeOrderModal()">✕</button>
@@ -199,7 +199,6 @@
             dots[index].classList.add('active');
         }
 
-        // دالتين للتحكم عبر الأسهم يمين ويسار
         function nextSlide() {
             let next = currentIdx + 1;
             if (next > 3) next = 0;
@@ -212,7 +211,7 @@
             moveToSlide(prev);
         }
 
-        // --- كود الخلفية المتحركة (تأثير زجاجات العطور الطائرة) ---
+        /* تأثير زجاجات العطور الطائرة */
         const canvas = document.getElementById('sprayCanvas');
         const ctx = canvas.getContext('2d');
         canvas.width = window.innerWidth; canvas.height = window.innerHeight;
@@ -269,7 +268,6 @@
             canvas.width = window.innerWidth; canvas.height = window.innerHeight;
         });
 
-        // إدارة فتح وإغلاق المودال والطلبات
         function openOrderModal(perfumeName) {
             selectedPerfume = perfumeName;
             document.getElementById('modalPerfumeName').innerText = `طلب عطر (${perfumeName})`;
@@ -292,7 +290,8 @@
                 alert('الرجاء تعبئة معلوماتك بالكامل لحجز العرض يا غالي!'); return;
             }
 
-            const myWhatsAppNumber = "962772073534"; 
+            // رقم الواتساب الخاص بك بعد التعديل الصحيح والمباشر لقاعدة البيانات
+            const myWhatsAppNumber = "962776567463"; 
 
             const message = `👑 طلب جديد وحصري لبراند AKA PERFUME 👑\n\n` +
                             `🧪 عطر السلايدر المختار: ${selectedPerfume}\n` +
