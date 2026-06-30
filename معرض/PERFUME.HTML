@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AKA PERFUME | THE LUXURY EXPERIENCE</title>
+    <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;700&family=Amiri:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+        body, html { width: 100%; height: 100%; background-color: #050505; font-family: 'Amiri', serif; overflow: hidden; color: #fff; }
+        
+        .brand-header { position: fixed; top: 40px; left: 50%; transform: translateX(-50%); z-index: 100; text-align: center; }
+        .brand-header h1 { font-family: 'Cinzel', serif; font-size: 34px; letter-spacing: 14px; font-weight: 400; background: linear-gradient(135deg, #ffffff 40%, #c5a880 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        
+        /* كانفاس الخلفية المتحركة (زجاجات العطر الطائرة) */
+        #sprayCanvas { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: 5; pointer-events: none; }
+
+        /* حاوية السلايدر لعرض الـ 4 عطور */
+        .slider-container { display: flex; width: 400vw; height: 100vh; transition: transform 0.8s cubic-bezier(0.77, 0, 0.175, 1); }
+        .slide { width: 100vw; height: 100vh; position: relative; display: flex; align-items: center; justify-content: flex-start; padding-right: 10%; }
+        
+        /* الفيديوهات التشويقية لباريس في الخلفية */
+        .slide-bg-video { position: absolute; top: 0; left: 0; width: 100%; height: 100%; object-fit: cover; z-index: 1; filter: brightness(0.3); }
+        .slide-overlay { position: absolute; top: 0; left: 0; width: 100%; height: 100%; background: linear-gradient(90deg, rgba(0,0,0,0.85) 30%, transparent 100%); z-index: 2; }
+        
+        .slide-content { position: relative; z-index: 10; max-width: 600px; }
+        .perfume-title { font-size: 65px; font-weight: 700; margin-bottom: 10px; text-shadow: 0 4px 20px rgba(0,0,0,0.8); }
+        .perfume-tag { font-family: 'Cinzel', serif; font-size: 13px; color: #c5a880; letter-spacing: 6px; margin-bottom: 25px; }
+        .price-box { font-size: 26px; font-weight: bold; color: #c5a880; margin-bottom: 30px; }
+        
+        .order-btn { background: transparent; color: #fff; border: 1px solid #fff; padding: 15px 50px; font-family: 'Cinzel', serif; letter-spacing: 4px; cursor: pointer; transition: 0.4s; font-weight: bold; border-radius: 4px; }
+        .order-btn:hover { background: #fff; color: #000; box-shadow: 0 15px 30px rgba(255,255,255,0.15); transform: translateY(-2px); }
+        
+        /* دوائر التنقل */
+        .navigation-dots { position: fixed; bottom: 50px; left: 50%; transform: translateX(-50%); z-index: 100; display: flex; gap: 15px; }
+        .dot { width: 12px; height: 12px; border-radius: 50%; background: rgba(255,255,255,0.2); border: 1px solid rgba(255,255,255,0.4); cursor: pointer; transition: 0.4s; }
+        .dot.active { background: #c5a880; border-color: #c5a880; transform: scale(1.3); box-shadow: 0 0 10px #c5a880; }
+
+        /* شريط ميزات البراند الثابت */
+        .trust-bar { position: fixed; bottom: 110px; right: 10%; z-index: 90; display: flex; gap: 30px; font-size: 13px; color: #888; border-right: 2px solid #c5a880; padding-right: 15px; }
+        .trust-bar strong { color: #c5a880; }
+
+        /* نافذة الطلب الفخمة */
+        .modal-overlay { position: fixed; top:0; left:0; width: 100%; height: 100%; background: rgba(0,0,0,0.85); backdrop-filter: blur(8px); z-index: 1000; display: flex; justify-content: center; align-items: center; opacity: 0; pointer-events: none; transition: 0.4s; }
+        .modal-overlay.active { opacity: 1; pointer-events: auto; }
+        .modal-box { background: #111; border: 1px solid #c5a880; padding: 35px; width: 90%; max-width: 440px; border-radius: 12px; position: relative; }
+        .close-modal { position: absolute; top: 15px; left: 15px; background: transparent; border: none; color: #fff; font-size: 20px; cursor: pointer; }
+        
+        .form-group { margin-bottom: 15px; }
+        .form-group label { display: block; font-size: 14px; color: #aaa; margin-bottom: 6px; }
+        .form-group input { width: 100%; padding: 12px; background: #181818; border: 1px solid #333; border-radius: 6px; color: #fff; font-size: 15px; }
+        .form-group input:focus { outline: none; border-color: #c5a880; }
+        
+        .bundle-options { display: flex; flex-direction: column; gap: 10px; margin-top: 5px; }
+        .bundle-btn { width: 100%; padding: 12px; background: #181818; border: 1px solid #333; color: #aaa; cursor: pointer; text-align: center; border-radius: 6px; transition: 0.3s; font-size: 14px; }
+        .bundle-btn.selected { border-color: #c5a880; color: #fff; background: rgba(197, 168, 128, 0.1); font-weight: bold; }
+        .submit-btn { width: 100%; padding: 15px; background: #c5a880; border: none; color: #000; font-weight: bold; font-size: 16px; border-radius: 6px; cursor: pointer; font-family: 'Amiri', serif; margin-top: 20px; }
+    </style>
+</head>
+<body>
+
+    <div class="brand-header">
+        <h1>AKA PERFUME</h1>
+    </div>
+
+    <!-- كانفاس الخلفية المتحركة (جزيئات العطور) -->
+    <canvas id="sprayCanvas"></canvas>
+
+    <!-- شريط الثقة الملكي للبراند -->
+    <div class="trust-bar">
+        <div>✨ ثبات مضمون <strong>48 ساعة</strong></div>
+        <div>🚚 توصيل <strong>لكافة المحافظات</strong></div>
+        <div>📦 الدفع <strong>عند الاستلام والمعاينة</strong></div>
+    </div>
+
+    <!-- السلايدر المتكامل بـ 4 عطور وفيديوهات أجواء باريس التشويقية -->
+    <div class="slider-container" id="slider">
+        
+        <!-- العطر 1: الترياق -->
+        <div class="slide">
+            <!-- فيديو تشويقي 1: شوارع باريس وبرج إيفل الكلاسيكي -->
+            <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-eiffel-tower-and-paris-street-at-sunset-41611-large.mp4" autoplay loop muted playsinline></video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="perfume-title">التِّرْيَاق</div>
+                <div class="perfume-tag">EAU DE PARFUM</div>
+                <div class="price-box">15 دينار</div>
+                <button class="order-btn" onclick="openOrderModal('التِّرْيَاق')">ORDER NOW</button>
+            </div>
+        </div>
+
+        <!-- العطر 2: الهيبة -->
+        <div class="slide">
+            <!-- فيديو تشويقي 2: مقاهي وأجواء باريس الفخمة بالليل -->
+            <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-paris-architecture-and-traffic-at-night-41620-large.mp4" autoplay loop muted playsinline></video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="perfume-title">الْهَيْبَة</div>
+                <div class="perfume-tag">PRIVATE BLEND</div>
+                <div class="price-box">15 دينار</div>
+                <button class="order-btn" onclick="openOrderModal('الْهَيْبَة')">ORDER NOW</button>
+            </div>
+        </div>
+
+        <!-- العطر 3: الغمام -->
+        <div class="slide">
+            <!-- فيديو تشويقي 3: الغيوم ونهر السين في باريس قبل الغروب -->
+            <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-seine-river-and-bridge-in-paris-41613-large.mp4" autoplay loop muted playsinline></video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="perfume-title">الْغَمَام</div>
+                <div class="perfume-tag">EAU DE PARFUM</div>
+                <div class="price-box">15 دينار</div>
+                <button class="order-btn" onclick="openOrderModal('الْغَمَام')">ORDER NOW</button>
+            </div>
+        </div>
+
+        <!-- العطر 4: دلال -->
+        <div class="slide">
+            <!-- فيديو تشويقي 4: تفاصيل باريس الرومانسية الدافئة -->
+            <video class="slide-bg-video" src="https://assets.mixkit.co/videos/preview/mixkit-arc-de-triomphe-in-paris-at-sunset-41618-large.mp4" autoplay loop muted playsinline></video>
+            <div class="slide-overlay"></div>
+            <div class="slide-content">
+                <div class="perfume-title">دَلَال</div>
+                <div class="perfume-tag">EXTRAIT DE PARFUM</div>
+                <div class="price-box">15 دينار</div>
+                <button class="order-btn" onclick="openOrderModal('دَلَال')">ORDER NOW</button>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- دوائر التحكم بالسلايدر -->
+    <div class="navigation-dots">
+        <div class="dot active" onclick="moveToSlide(0)"></div>
+        <div class="dot" onclick="moveToSlide(1)"></div>
+        <div class="dot" onclick="moveToSlide(2)"></div>
+        <div class="dot" onclick="moveToSlide(3)"></div>
+    </div>
+
+    <!-- نافذة الطلب بالعروض الرسمية الجديدة -->
+    <div class="modal-overlay" id="orderModal">
+        <div class="modal-box">
+            <button class="close-modal" onclick="closeOrderModal()">✕</button>
+            <h2 id="modalPerfumeName" style="text-align:center; margin-bottom:5px;">طلب عطر</h2>
+            <p style="text-align:center; color:#c5a880; font-size:14px; margin-bottom:20px;">كفالة ذهبية على فخامة وجودة الثبات</p>
+            
+            <div class="form-group">
+                <label>الاسم الكامل:</label>
+                <input type="text" id="clientName" placeholder="أدخل اسمك الكريم">
+            </div>
+            <div class="form-group">
+                <label>رقم الهاتف:</label>
+                <input type="tel" id="clientPhone" placeholder="07XXXXXXXX">
+            </div>
+            <div class="form-group">
+                <label>موقع التوصيل (المحافظة والمدينة):</label>
+                <input type="text" id="clientAddress" placeholder="أدخل تفاصيل العنوان">
+            </div>
+
+            <div class="form-group">
+                <label>اختر العرض التوفيري الفخم الحصري:</label>
+                <div class="bundle-options">
+                    <div class="bundle-btn selected" id="opt1" onclick="selectBundle('عبوة واحدة بـ 15 دينار', 1)">عبوة واحدة بـ 15 دينار</div>
+                    <div class="bundle-btn" id="opt2" onclick="selectBundle('عبوتين بـ 25 دينار (توفير 5 دنانير) 🔥', 2)">عبوتين بـ 25 دينار 🔥</div>
+                    <div class="bundle-btn" id="opt3" onclick="selectBundle('3 عبوات بـ 35 دينار (العرض الملكي الأقوى) 👑', 3)">3 عبوات بـ 35 دينار 👑</div>
+                </div>
+            </div>
+            
+            <button class="submit-btn" onclick="sendOrderToWhatsApp()">تأكيد الطلب عبر واتساب</button>
+        </div>
+    </div>
+
+    <script>
+        const slider = document.getElementById('slider');
+        const dots = document.querySelectorAll('.dot');
+        let selectedPerfume = '';
+        let selectedOffer = 'عبوة واحدة بـ 15 دينار';
+        let musicStarted = false;
+
+        function moveToSlide(index) {
+            slider.style.transform = `translateX(${index * 25}%)`; 
+            dots.forEach(dot => dot.classList.remove('active'));
+            dots[index].classList.add('active');
+        }
+
+        // معزوفة بيانو هادئة جداً وراقية تليق بأجواء النيش والفخامة الاسترخائية
+        const bgMusic = new Audio('https://www.soundhelix.com/examples/mp3/SoundHelix-Song-8.mp3'); 
+        bgMusic.loop = true;
+        bgMusic.volume = 0.12; 
+
+        function startMusicOnInteraction() {
+            if (!musicStarted) {
+                bgMusic.play().then(() => {
+                    musicStarted = true;
+                }).catch(e => console.log("بانتظار حركة المستخدم لتفعيل الصوت التلقائي"));
+            }
+        }
+
+        // تفعيل تشغيل الموسيقى تلقائياً وبخلفية خفية عند أول حركة أو نقرة للزبون بالصفحة
+        window.addEventListener('click', startMusicOnInteraction);
+        window.addEventListener('touchstart', startMusicOnInteraction);
+
+        // --- كود الخلفية المتحركة (تأثير زجاجات العطور الطائرة) ---
+        const canvas = document.getElementById('sprayCanvas');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        let particlesArray = [];
+
+        class PerfumeBottleParticle {
+            constructor(){
+                this.x = Math.random() * canvas.width;
+                this.y = Math.random() * canvas.height + Math.random() * 200;
+                this.baseSize = Math.random() * 14 + 10;
+                this.size = this.baseSize;
+                this.speedY = Math.random() * 0.3 + 0.15;
+                this.opacity = Math.random() * 0.22 + 0.04;
+                this.angle = Math.random() * Math.PI * 2;
+                this.spin = Math.random() * 0.008 - 0.004;
+            }
+            update(){
+                this.y -= this.speedY;
+                this.angle += this.spin;
+                if (this.y < -50) {
+                    this.y = canvas.height + 50;
+                    this.x = Math.random() * canvas.width;
+                }
+            }
+            draw(){
+                ctx.save();
+                ctx.translate(this.x, this.y);
+                ctx.rotate(this.angle);
+                ctx.strokeStyle = `rgba(197, 168, 128, ${this.opacity})`;
+                ctx.lineWidth = 1.2;
+                
+                let w = this.size;
+                let h = this.size * 1.3;
+                
+                ctx.beginPath();
+                ctx.rect(-w/2, -h/2 + h*0.2, w, h*0.8);
+                ctx.rect(-w*0.2/2, -h/2, w*0.2, h*0.2);
+                ctx.rect(-w*0.4/2, -h/2 - h*0.15, w*0.4, h*0.15);
+                ctx.stroke();
+                ctx.restore();
+            }
+        }
+
+        for(let i=0; i<15; i++){ particlesArray.push(new PerfumeBottleParticle()); }
+        
+        function animateParticles(){
+            ctx.clearRect(0,0, canvas.width, canvas.height);
+            for(let i=0; i<particlesArray.length; i++){ particlesArray[i].update(); particlesArray[i].draw(); }
+            requestAnimationFrame(animateParticles);
+        }
+        animateParticles();
+
+        window.addEventListener('resize', function(){
+            canvas.width = window.innerWidth; canvas.height = window.innerHeight;
+        });
+
+        // إدارة فتح وإغلاق المودال والطلبات
+        function openOrderModal(perfumeName) {
+            selectedPerfume = perfumeName;
+            document.getElementById('modalPerfumeName').innerText = `طلب عطر (${perfumeName})`;
+            document.getElementById('orderModal').classList.add('active');
+        }
+        function closeOrderModal() { document.getElementById('orderModal').classList.remove('active'); }
+
+        function selectBundle(offerText, id) {
+            selectedOffer = offerText;
+            document.querySelectorAll('.bundle-btn').forEach(btn => btn.classList.remove('selected'));
+            document.getElementById('opt' + id).classList.add('selected');
+        }
+
+        function sendOrderToWhatsApp() {
+            const name = document.getElementById('clientName').value;
+            const phone = document.getElementById('clientPhone').value;
+            const address = document.getElementById('clientAddress').value;
+
+            if(!name || !phone || !address) {
+                alert('الرجاء تعبئة معلوماتك بالكامل لحجز العرض يا غالي!'); return;
+            }
+
+            const myWhatsAppNumber = "9627XXXXXXXX"; 
+
+            const message = `👑 طلب جديد وحصري لبراند AKA PERFUME 👑\n\n` +
+                            `🧪 عطر السلايدر المختار: ${selectedPerfume}\n` +
+                            `🛍️ العرض المطلوب: ${selectedOffer}\n\n` +
+                            `👤 اسم الزبون: ${name}\n` +
+                            `📞 رقم الهاتف: ${phone}\n` +
+                            `📍 موقع التوصيل: ${address}\n\n` +
+                            `✨ الدفع متاح عند الاستلام والمعاينة مكفولة.`;
+
+            const whatsappUrl = `https://api.whatsapp.com/send?phone=${myWhatsAppNumber}&text=${encodeURIComponent(message)}`;
+            window.open(whatsappUrl, '_blank');
+            closeOrderModal();
+        }
+    </script>
+</body>
+</html>
